@@ -27,6 +27,7 @@ namespace Cvjećarnica_Zvončica.Controllers
         [HttpGet]
         public IActionResult DodajNoviCvijetUBazu()
         {
+            ViewBag.BazaCvijeca = _cvijece.PopisSvogCvijeca();
             return View();
         }
 
@@ -38,6 +39,7 @@ namespace Cvjećarnica_Zvončica.Controllers
                 if (ModelState.IsValid)
                 {
                     ViewData["Success"] = "Unos novog cvijeta u bazu je uspješan.";
+                    ViewBag.BazaCvijeca = _cvijece.PopisSvogCvijeca();
                     _cvijece.DodajNoviCvijet(cvijet);
                     return View();
                 }

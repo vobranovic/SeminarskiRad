@@ -39,7 +39,7 @@ namespace Cvjećarnica_Zvončica.Baza
 
         public List<Cvijet> Stanje()
         {
-            var cvijece = _cvijece.GroupBy(c => c.Naziv)
+            var cvijece = _cvijece.GroupBy(c => c.Naziv);
             return _cvijece;
         }
     }
