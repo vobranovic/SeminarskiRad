@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cvjećarnica_Zvončica.Models
+namespace Cvjećarnica_Zvončica.Enums
 {
-    public enum Naziv
+    public enum NazivCvijeta
     {
         Ruža,
         Tulipan,
         Orhideja,
+        Ljiljan,
         Kala,
-        Jaglac
+        Tratinčica
     }
 }

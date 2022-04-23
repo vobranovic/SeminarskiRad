@@ -1,59 +1,153 @@
-﻿using Cvjećarnica_Zvončica.Baza;
-using Cvjećarnica_Zvončica.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Cvjećarnica_Zvončica.Data;
+using Cvjećarnica_Zvončica.Models;
 
 namespace Cvjećarnica_Zvončica.Controllers
 {
     public class CvijetController : Controller
     {
-        private BazaCvijeca _cvijece;
+        private readonly CvjecarnicaDbContext _context;
 
-        public CvijetController()
+        public CvijetController(CvjecarnicaDbContext context)
         {
-            _cvijece = new BazaCvijeca();
+            _context = context;
         }
 
-        public IActionResult PopisDostupnogCvijeca()
+        // GET: Cvijet
+        public async Task<IActionResult> Index()
         {
-            var cvijece1 = _cvijece.Stanje();
-            var cvijece = _cvijece.PopisSvogCvijeca();
-            return View(cvijece);
+            return View(await _context.Cvijet.ToListAsync());
         }
 
-        [HttpGet]
-        public IActionResult DodajNoviCvijetUBazu()
+        // GET: Cvijet/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.BazaCvijeca = _cvijece.PopisSvogCvijeca();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cvijet = await _context.Cvijet
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (cvijet == null)
+            {
+                return NotFound();
+            }
+
+            return View(cvijet);
+        }
+
+        // GET: Cvijet/Create
+        public IActionResult Create()
+        {
             return View();
         }
 
+        // POST: Cvijet/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public IActionResult DodajNoviCvijetUBazu(Cvijet cvijet)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id,Naziv,Boja,Datum,ImgUrl,Cijena")] Cvijet cvijet)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    ViewData["Success"] = "Unos novog cvijeta u bazu je uspješan.";
-                    ViewBag.BazaCvijeca = _cvijece.PopisSvogCvijeca();
-                    _cvijece.DodajNoviCvijet(cvijet);
-                    return View();
-                }
-                else
-                {
-                    ViewData["Error"] = "Greška kod unosa forme.";
-                    return View();
-                }
+                _context.Add(cvijet);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception e)
+            return View(cvijet);
+        }
+
+        // GET: Cvijet/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
             {
-                ViewBag.UnknownError = "Dogodila se pogreška: " + e.Message;
-                return View();
+                return NotFound();
             }
+
+            var cvijet = await _context.Cvijet.FindAsync(id);
+            if (cvijet == null)
+            {
+                return NotFound();
+            }
+            return View(cvijet);
+        }
+
+        // POST: Cvijet/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Naziv,Boja,Datum,ImgUrl,Cijena")] Cvijet cvijet)
+        {
+            if (id != cvijet.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(cvijet);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CvijetExists(cvijet.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(cvijet);
+        }
+
+        // GET: Cvijet/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var cvijet = await _context.Cvijet
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (cvijet == null)
+            {
+                return NotFound();
+            }
+
+            return View(cvijet);
+        }
+
+        // POST: Cvijet/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var cvijet = await _context.Cvijet.FindAsync(id);
+            _context.Cvijet.Remove(cvijet);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool CvijetExists(int id)
+        {
+            return _context.Cvijet.Any(e => e.Id == id);
         }
     }
 }
