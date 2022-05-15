@@ -23,7 +23,7 @@ namespace Cvjećarnica_Zvončica.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Kontakt()
         {
             return View();
         }
