@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Cvjećarnica_Zvončica.Models
 {
-    public class Buket
+    public class Kategorija
     {
     }
 }

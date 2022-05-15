@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 
 namespace Cvjećarnica_Zvončica.Controllers
 {
-    public class PocetnaController : Controller
+    public class HomeController : Controller
     {
-        private readonly ILogger<PocetnaController> _logger;
+        private readonly ILogger<HomeController> _logger;
 
-        public PocetnaController(ILogger<PocetnaController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Pocetna()
+        public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Kontakt()
+        public IActionResult Privacy()
         {
             return View();
         }
