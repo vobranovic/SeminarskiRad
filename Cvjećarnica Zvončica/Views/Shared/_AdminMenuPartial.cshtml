@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Cvjećarnica_Zvončica.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Admin"))
+{
+    <li class="nav-item">
+        <div class="dropdown">
+            <a class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" href="#">Administracija</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" asp-area="Admin" asp-controller="Kategorija" asp-action="Index">Kategorije</a>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="Proizvod" asp-action="Index">Proizvodi</a>
+                <a class="dropdown-item" asp-area="Admin" asp-controller="Korisnici" asp-action="Index">Korisnici</a>
+            </div>
+        </div>
+    </li>
+}

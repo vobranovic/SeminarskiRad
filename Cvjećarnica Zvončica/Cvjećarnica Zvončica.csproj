@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="Areas\Administracija\Data\" />
     <Folder Include="Areas\Administracija\Models\" />
-    <Folder Include="Areas\Administracija\Views\" />
   </ItemGroup>
 
 </Project>
