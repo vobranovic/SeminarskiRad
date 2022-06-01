@@ -49,5 +49,23 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
             return View(applicationUser);
         }
 
+        [HttpGet]
+        public IActionResult Brisi(string id)
+        {
+            var korisnik = _dbContext.Users.Find(id);
+
+            return View(korisnik);
+        }
+
+        [HttpPost]
+        public IActionResult PotvrdiBrisi(string id)
+        {
+            var korisnik = _dbContext.Users.Find(id);
+            _dbContext.Users.Remove(korisnik);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
