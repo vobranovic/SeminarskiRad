@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
 {
-    [Area("Admin")]
+    [Area("Administracija")]
     [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {

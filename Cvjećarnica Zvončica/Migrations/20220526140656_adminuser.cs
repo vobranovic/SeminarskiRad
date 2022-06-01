@@ -38,7 +38,7 @@ namespace Cvjećarnica_Zvončica.Migrations
             migrationBuilder.Sql(sb.ToString());
 
             //insert rola
-            migrationBuilder.Sql($"INSERT INTO AspNetRoles (Id, Name, NormalizedName) VALUES('{_adminRoleGuid}', 'vedran.obranovic', 'VEDRAN.OBRANOVIC')");
+            migrationBuilder.Sql($"INSERT INTO AspNetRoles (Id, Name, NormalizedName) VALUES('{_adminRoleGuid}', 'Admin', 'ADMIN')");
 
             //insert rola za korisnika
             migrationBuilder.Sql($"INSERT INTO AspNetUserRoles(UserId, RoleId) VALUES ('{_adminUserGuid}', '{_adminRoleGuid}')");
