@@ -36,11 +36,11 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
         [HttpPost]
         public IActionResult Uredi(ApplicationUser applicationUser)
         {
-            var korisnik = _dbContext.Users.FirstOrDefault(k => k.Id == applicationUser.Id);
-            korisnik = applicationUser;
+            //var korisnik = _dbContext.Users.FirstOrDefault(k => k.Id == applicationUser.Id);
+            
             if (ModelState.IsValid)
             {
-                _dbContext.Users.Update(korisnik);
+                _dbContext.Users.Update(applicationUser);
                 _dbContext.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
