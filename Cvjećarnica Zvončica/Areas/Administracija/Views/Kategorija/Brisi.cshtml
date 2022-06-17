@@ -1,0 +1,32 @@
+﻿@model Cvjećarnica_Zvončica.Models.Kategorija
+
+@{
+    ViewData["Title"] = "Brisanje Kategorije";
+}
+
+<h3 class="text-danger">Jeste li sigurni da želite pobrisati ovu kategoriju?</h3>
+
+<hr />
+
+<p class="text-black-50">
+    Oprez: Svi proizvodi koji su oznaćeni ovom kategorijom više neće spadati u nju. Ukoliko nakon brisanja, ponovno kreirate kategoriju sa istim nazivom, sve proizvode koji spadaju u nju, će biti potrebno ponovno povezati sa novokreiranom kategorijom.
+</p>
+
+<div>
+    <h4>Kategorija</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Naziv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Naziv)
+        </dd>
+    </dl>
+    
+    <form asp-action="BrisiPotvrdi">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Briši" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-primary">Natrag na popis kategorija</a>
+    </form>
+</div>
