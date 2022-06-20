@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Cvjećarnica_Zvončica.Models.Proizvod>
+
+@{
+    ViewData["Title"] = "Popis proizvoda";
+}
+
+<h1>Popis Svih Proizvoda</h1>
+
+<p>
+    <a asp-action="Kreiraj" class="btn btn-success">Kreiraj Novi Proizvod</a>
+</p>
+<hr />
+@if (Model != null && Model.Count() > 0)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Naziv)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Kolicina)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Opis)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cijena)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Naziv)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Kolicina)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Opis)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cijena) kn
+                    </td>
+                    <td>
+                        <a asp-action="Uredi" asp-route-id="@item.Id" class="btn btn-secondary">Uredi</a> |
+                        <a asp-action="Brisi" asp-route-id="@item.Id" class="btn btn-danger">Briši</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-black-50">Trenutno nema niti jedan proizvod u bazi!</p>
+}
+
