@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ProizvodKategorija>
+@{
+    ViewData["Title"] = "Kategorije";
+}
+
+<h1>Kategorije proizvoda</h1>
+<hr />
+
+<p>
+    <a asp-action="Kreiraj" asp-route-proizvodId="@ViewBag.ProizvodId" class="btn btn-success">Dodaj Novu Kategoriju Za Proizvod</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Naziv Proizvoda</th>
+            <th>Naziv Kategorije</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.NazivProizvoda</td>
+                <td>@item.NazivKategorije</td>
+                <td>
+                    <a asp-action="Brisi" asp-route-id="@item.Id" asp-route-Id="@item.Id" class="btn btn-danger">Brisi</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" asp-controller="Proizvod" class="btn btn-primary">Natrag na popis proizvoda</a>
+

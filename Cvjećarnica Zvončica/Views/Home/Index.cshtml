@@ -1,8 +1,61 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Proizvod>
+@{
+    ViewData["Title"] = "Pocetna";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1>Proizvodi i Usluge</h1>
+<hr />
+
+<div class="row mb-5">
+    <div class="col-md-2">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filtriraj po Kategoriji
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                @foreach (var item in ViewBag.Kategorije)
+                {
+                    <a class="dropdown-item" asp-action="Index" asp-route-kategorijaId="@item.Value">@item.Text</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <a asp-action="Index" class="btn btn-warning">Resetiraj Filter</a>
+    </div>
+</div>
+
+
+<div class="row mt-3">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-4 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Naziv</h5>
+                    <p class="card-text">@item.Opis</p>
+
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                            <tr>
+                                <th>Cijena</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@item.Cijena kn</td>
+                                <td>
+                                    <form method="post" asp-controller="Proizvod" asp-action="Detalji">
+                                        <input type="hidden" name="proizvodId" value="@item.Id" />
+                                        <input type="submit" class="btn btn-success btn-sm" value="Detalji Proizvoda" />
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
 </div>
