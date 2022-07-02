@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,13 +33,25 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Kreiraj(Proizvod proizvod)
         {
             if (ModelState.IsValid)
             {
+                if (proizvod.SlikaFile != null)
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        proizvod.SlikaFile.CopyTo(stream);
+                        var file = stream.ToArray();
+
+                        proizvod.Slika = file;
+                    }
+                }
+
                 _dbContext.Proizvod.Add(proizvod);
                 _dbContext.SaveChanges();
-
+                
                 return RedirectToAction(nameof(Index));
             }
 
@@ -57,6 +70,17 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (proizvod.SlikaFile != null)
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        proizvod.SlikaFile.CopyTo(stream);
+                        var file = stream.ToArray();
+
+                        proizvod.Slika = file;
+                    }
+                }
+
                 _dbContext.Proizvod.Update(proizvod);
                 _dbContext.SaveChanges();
 

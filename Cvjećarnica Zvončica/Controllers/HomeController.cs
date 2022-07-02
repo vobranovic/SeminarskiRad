@@ -38,7 +38,9 @@ namespace Cvjećarnica_Zvončica.Controllers
                            Id = p.Id,
                            Naziv = p.Naziv,
                            Opis = p.Opis,                           
-                           Cijena = p.Cijena
+                           Cijena = p.Cijena,
+                           Slika = p.Slika
+                           
                        }
                     ).ToList();
             }

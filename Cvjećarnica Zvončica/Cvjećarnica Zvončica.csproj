@@ -7,17 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Administracija\Data\**" />
+    <Compile Remove="Areas\Administracija\Models\**" />
+    <Content Remove="Areas\Administracija\Data\**" />
+    <Content Remove="Areas\Administracija\Models\**" />
+    <EmbeddedResource Remove="Areas\Administracija\Data\**" />
+    <EmbeddedResource Remove="Areas\Administracija\Models\**" />
+    <None Remove="Areas\Administracija\Data\**" />
+    <None Remove="Areas\Administracija\Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Administracija\Data\" />
-    <Folder Include="Areas\Administracija\Models\" />
   </ItemGroup>
 
 </Project>

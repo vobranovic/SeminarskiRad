@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace Cvjećarnica_Zvončica.Models
 {
     public class Proizvod
     {
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Naziv je obavezan.")]
@@ -27,12 +30,21 @@ namespace Cvjećarnica_Zvončica.Models
         [StringLength(2000, MinimumLength = 5)]
         public string Opis { get; set; }
 
+        [NotMapped]
+        public IFormFile SlikaFile { get; set; }
+
+        public byte[] Slika { get; set; }
+
         [ForeignKey("ProizvodId")]
         public List<Stavka> Stavke { get; set; }
 
         [ForeignKey("ProizvodId")]
         public List<ProizvodKategorija> ProizvodKategorija { get; set; }
 
+        
 
+
+
+        
     }
 }
