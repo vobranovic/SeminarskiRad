@@ -54,10 +54,7 @@
                             <tr>
                                 <td>@item.Cijena kn</td>
                                 <td>
-                                    <form method="post" asp-controller="Proizvod" asp-action="Detalji">
-                                        <input type="hidden" name="proizvodId" value="@item.Id" />
-                                        <input type="submit" class="btn btn-success btn-sm" value="Detalji Proizvoda" />
-                                    </form>
+                                    <a asp-action="DetaljiProizvoda" asp-route-id="@item.Id" class="btn btn-success">Prikaži Detalje</a>
                                 </td>
                             </tr>
                         </tbody>

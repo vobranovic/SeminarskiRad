@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model List<IdentityRole>
+@{
+    ViewData["Title"] = "Upravljanje Rolama";
+}
+
+<h1>Upravljanje Rolama</h1>
+
+<form method="post" asp-action="DodajRolu" asp-controller="Role">
+    <div class="input-group">
+        <input name="nazivRole" class="form-control" w-25 />
+        <span class="input-group-btn">
+            <button class="btn btn-info">Dodaj Novu Rolu</button>
+        </span>
+    </div>
+</form>
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Rola</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

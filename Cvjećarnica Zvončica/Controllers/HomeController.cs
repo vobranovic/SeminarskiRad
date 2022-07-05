@@ -56,6 +56,17 @@ namespace Cvjećarnica_Zvončica.Controllers
             return View(proizvodi);
         }
 
+        [HttpGet]
+        public IActionResult DetaljiProizvoda(int id)
+        {
+            var proizvod = _dbContext.Proizvod.Find(id);
+            if (proizvod == null)
+            {
+                return NotFound();
+            }
+            return View(proizvod);
+        }
+
         public IActionResult Kontakt()
         {
             return View();

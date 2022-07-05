@@ -1,9 +1,11 @@
 ﻿using Cvjećarnica_Zvončica.Data;
 using Cvjećarnica_Zvončica.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,59 +15,169 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
     [Authorize(Roles = "Admin")]
     public class KorisnikController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private UserManager<ApplicationUser> _userManager;
+        private IPasswordHasher<ApplicationUser> _passwordHasher;
 
-        public KorisnikController(ApplicationDbContext dbContext)
+        public KorisnikController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHasher)
         {
-            _dbContext = dbContext;
+            _userManager = userManager;
+            _passwordHasher = passwordHasher;
         }
 
         public IActionResult Index()
         {
-            var korisnici = _dbContext.Users.ToList();
+            var korisnici = _userManager.Users.ToList();
             return View(korisnici);
         }
 
         [HttpGet]
-        public IActionResult Uredi(string id)
+        public IActionResult Kreiraj()
         {
-            var korisnik = _dbContext.Users.Find(id);
-            return View(korisnik);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Uredi(ApplicationUser applicationUser)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Kreiraj(KorisnikViewModel korisnik)
         {
-            //var korisnik = _dbContext.Users.FirstOrDefault(k => k.Id == applicationUser.Id);
-            
             if (ModelState.IsValid)
             {
-                _dbContext.Users.Update(applicationUser);
-                _dbContext.SaveChanges();
+                ApplicationUser appUser = new ApplicationUser()
+                {
+                    UserName = korisnik.Email,
+                    Email = korisnik.Email,
+                    Ime = korisnik.Ime,
+                    Prezime = korisnik.Prezime,
+                    Adresa = korisnik.Adresa
+                };
 
-                return RedirectToAction(nameof(Index));
+                IdentityResult identityResult = await _userManager.CreateAsync(appUser, korisnik.Password);
+
+                if (identityResult.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    Errors(identityResult);
+                }
             }
-
-            return View(applicationUser);
+            return View(korisnik);
         }
 
         [HttpGet]
-        public IActionResult Brisi(string id)
+        public async Task<IActionResult> Uredi(string id)
         {
-            var korisnik = _dbContext.Users.Find(id);
+            ApplicationUser korisnik = await _userManager.FindByIdAsync(id);
 
-            return View(korisnik);
+            if (korisnik != null)
+            {
+                return View(korisnik);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
-        public IActionResult PotvrdiBrisi(string id)
+        public async Task<IActionResult> Uredi(string id, string email, string password, string ime, string prezime, string adresa)
         {
-            var korisnik = _dbContext.Users.Find(id);
-            _dbContext.Users.Remove(korisnik);
-            _dbContext.SaveChanges();
+            ApplicationUser appUser = await _userManager.FindByIdAsync(id);
+            if (appUser != null)
+            {
+                if (!string.IsNullOrEmpty(ime))
+                {
+                    appUser.Ime = ime;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Ime je obavezno.");
+                }
+
+                if (!string.IsNullOrEmpty(prezime))
+                {
+                    appUser.Prezime = prezime;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Prezime je obavezno.");
+                }
+
+                appUser.Adresa = adresa;
+
+                if (!string.IsNullOrEmpty(email))
+                {
+                    appUser.Email = email;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Email je obavezan.");
+                }
+
+                if (!string.IsNullOrEmpty(password))
+                {
+                    appUser.PasswordHash = _passwordHasher.HashPassword(appUser, password);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Lozinka je obavezna.");
+                }
+
+                if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
+                {
+                    IdentityResult result = await _userManager.UpdateAsync(appUser);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        Errors(result);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Korisnik nije pronađen.");
+            }
+            return View(appUser);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Brisi(string id)
+        {
+            ApplicationUser appUser = await _userManager.FindByIdAsync(id);
+            if (appUser != null)
+            {
+                var result = await _userManager.DeleteAsync(appUser);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    Errors(result);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Korisnik nije pronađen.");
+            }
 
             return RedirectToAction(nameof(Index));
         }
+
+        private void Errors(IdentityResult identityResult)
+        {
+            foreach (IdentityError error in identityResult.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+        }
+
+
 
     }
 }
