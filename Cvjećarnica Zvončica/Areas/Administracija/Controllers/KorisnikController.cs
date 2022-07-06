@@ -3,6 +3,7 @@ using Cvjećarnica_Zvončica.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,12 +17,14 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
     public class KorisnikController : Controller
     {
         private UserManager<ApplicationUser> _userManager;
-        private IPasswordHasher<ApplicationUser> _passwordHasher;
+        private RoleManager<IdentityRole> _roleManager;
+        private IPasswordHasher<ApplicationUser> _passwordHasher;        
 
-        public KorisnikController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHasher)
+        public KorisnikController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHasher, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _passwordHasher = passwordHasher;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -33,6 +36,11 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
         [HttpGet]
         public IActionResult Kreiraj()
         {
+            ViewBag.Role = _roleManager.Roles.ToList().Select(r => new SelectListItem()
+            { 
+                Text = r.Name, Value = r.Id.ToString()
+            });
+
             return View();
         }
 
@@ -50,11 +58,14 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
                     Prezime = korisnik.Prezime,
                     Adresa = korisnik.Adresa
                 };
+                
 
                 IdentityResult identityResult = await _userManager.CreateAsync(appUser, korisnik.Password);
 
                 if (identityResult.Succeeded)
                 {
+                    var odabranaRola = _roleManager.Roles.FirstOrDefault(r => r.Id == korisnik.Rola);
+                    await _userManager.AddToRoleAsync(appUser, odabranaRola.Name);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -72,6 +83,11 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
 
             if (korisnik != null)
             {
+                ViewBag.Role = _roleManager.Roles.ToList().Select(r => new SelectListItem()
+                {
+                    Text = r.Name,
+                    Value = r.Id.ToString()
+                });
                 return View(korisnik);
             }
             else
@@ -81,7 +97,7 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Uredi(string id, string email, string password, string ime, string prezime, string adresa)
+        public async Task<IActionResult> Uredi(string id, string email, string password, string ime, string prezime, string adresa, string rola)
         {
             ApplicationUser appUser = await _userManager.FindByIdAsync(id);
             if (appUser != null)
@@ -124,12 +140,20 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
                     ModelState.AddModelError("", "Lozinka je obavezna.");
                 }
 
+                
+
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
                 {
                     IdentityResult result = await _userManager.UpdateAsync(appUser);
 
                     if (result.Succeeded)
                     {
+                        var trenutnaRola = await _userManager.GetRolesAsync(appUser);
+                        await _userManager.RemoveFromRolesAsync(appUser, trenutnaRola);
+
+                        var odabranaRola = _roleManager.Roles.FirstOrDefault(r => r.Id == rola);
+                        await _userManager.AddToRoleAsync(appUser, odabranaRola.Name);
+
                         return RedirectToAction(nameof(Index));
                     }
                     else

@@ -24,5 +24,7 @@ namespace Cvjećarnica_Zvončica.Models
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string RepeatedPassword { get; set; }
+
+        public string Rola { get; set; }
     }
 }
