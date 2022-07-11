@@ -9,10 +9,10 @@ namespace Cvjećarnica_Zvončica.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class APIController : ControllerBase
+    public class ProizvodiController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
-        public APIController(ApplicationDbContext dbContext)
+        public ProizvodiController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -32,7 +32,7 @@ namespace Cvjećarnica_Zvončica.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public ActionResult<Proizvod> Proizvod(int id)
         {
             var proizvod = _dbContext.Proizvod.Select(p => new { p.Id, p.Naziv, p.Kolicina, p.Cijena, p.Opis }).FirstOrDefault(pr => pr.Id == id);

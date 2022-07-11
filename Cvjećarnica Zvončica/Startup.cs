@@ -64,11 +64,6 @@ namespace Cvjećarnica_Zvončica
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "api",
-                    pattern: "api/{controller=API}/{action}/{id?}"
-                    );
-
-                endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                     );                
