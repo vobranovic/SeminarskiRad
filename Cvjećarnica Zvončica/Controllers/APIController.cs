@@ -9,10 +9,10 @@ namespace Cvjećarnica_Zvončica.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProizvodiController : ControllerBase
+    public class APIController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
-        public ProizvodiController(ApplicationDbContext dbContext)
+        public APIController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

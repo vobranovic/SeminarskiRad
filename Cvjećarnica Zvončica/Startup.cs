@@ -65,17 +65,20 @@ namespace Cvjećarnica_Zvončica
             {
                 endpoints.MapControllerRoute(
                     name: "api",
-                    pattern: "api/{controller=Proizvodi}/{action}/{id?}"
+                    pattern: "api/{controller=API}/{action}/{id?}"
                     );
 
                 endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                    );
+                    );                
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                    );
+
+                
 
                 endpoints.MapRazorPages();
             });
