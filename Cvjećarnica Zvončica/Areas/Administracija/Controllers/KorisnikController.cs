@@ -66,6 +66,9 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
                 {
                     var odabranaRola = _roleManager.Roles.FirstOrDefault(r => r.Id == korisnik.Rola);
                     await _userManager.AddToRoleAsync(appUser, odabranaRola.Name);
+                    appUser.Rola = odabranaRola.Name;
+                    await _userManager.UpdateAsync(appUser);
+
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -99,12 +102,12 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
         [HttpPost]
         public async Task<IActionResult> Uredi(string id, string email, string password, string ime, string prezime, string adresa, string rola)
         {
-            ApplicationUser appUser = await _userManager.FindByIdAsync(id);
-            if (appUser != null)
+            ApplicationUser korisnik = await _userManager.FindByIdAsync(id);
+            if (korisnik != null)
             {
                 if (!string.IsNullOrEmpty(ime))
                 {
-                    appUser.Ime = ime;
+                    korisnik.Ime = ime;
                 }
                 else
                 {
@@ -113,18 +116,18 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
 
                 if (!string.IsNullOrEmpty(prezime))
                 {
-                    appUser.Prezime = prezime;
+                    korisnik.Prezime = prezime;
                 }
                 else
                 {
                     ModelState.AddModelError("", "Prezime je obavezno.");
                 }
 
-                appUser.Adresa = adresa;
+                korisnik.Adresa = adresa;
 
                 if (!string.IsNullOrEmpty(email))
                 {
-                    appUser.Email = email;
+                    korisnik.Email = email;
                 }
                 else
                 {
@@ -133,7 +136,7 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
 
                 if (!string.IsNullOrEmpty(password))
                 {
-                    appUser.PasswordHash = _passwordHasher.HashPassword(appUser, password);
+                    korisnik.PasswordHash = _passwordHasher.HashPassword(korisnik, password);
                 }
                 else
                 {
@@ -144,15 +147,18 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
 
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
                 {
-                    IdentityResult result = await _userManager.UpdateAsync(appUser);
+                    IdentityResult result = await _userManager.UpdateAsync(korisnik);
 
                     if (result.Succeeded)
                     {
-                        var trenutnaRola = await _userManager.GetRolesAsync(appUser);
-                        await _userManager.RemoveFromRolesAsync(appUser, trenutnaRola);
+                        var trenutnaRola = await _userManager.GetRolesAsync(korisnik);
+                        await _userManager.RemoveFromRolesAsync(korisnik, trenutnaRola);
 
                         var odabranaRola = _roleManager.Roles.FirstOrDefault(r => r.Id == rola);
-                        await _userManager.AddToRoleAsync(appUser, odabranaRola.Name);
+                        await _userManager.AddToRoleAsync(korisnik, odabranaRola.Name);
+
+                        korisnik.Rola = odabranaRola.Name;
+                        await _userManager.UpdateAsync(korisnik);
 
                         return RedirectToAction(nameof(Index));
                     }
@@ -166,7 +172,7 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
             {
                 ModelState.AddModelError("", "Korisnik nije pronađen.");
             }
-            return View(appUser);
+            return View(korisnik);
         }
 
         [HttpGet]
