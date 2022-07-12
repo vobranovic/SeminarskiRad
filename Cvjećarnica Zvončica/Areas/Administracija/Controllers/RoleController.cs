@@ -35,5 +35,37 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult Kreiraj()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Kreiraj(IdentityRole identityRole)
+        {
+            if (identityRole.Name != null)
+            {
+                await _roleManager.CreateAsync(identityRole);
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.Greska = "Greška u nazivu role. Naziv ne smije biti prazan!";
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Brisi(string id)
+        {
+            if (id != null)
+            {
+                var rolaZaBrisati = await _roleManager.FindByIdAsync(id);
+                await _roleManager.DeleteAsync(rolaZaBrisati);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
