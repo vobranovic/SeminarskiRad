@@ -7,8 +7,9 @@
 <h1>Popis Svih Proizvoda</h1>
 
 <p>
-    <a asp-action="Kreiraj" class="btn btn-success">Kreiraj Novi Proizvod</a>
+    <a asp-action="Kreiraj" class="btn btn-primary">Kreiraj Novi Proizvod</a>
 </p>
+
 <hr />
 @if (Model != null && Model.Count() > 0)
 {
@@ -58,7 +59,7 @@
                     }
                     </td>
                     <td>
-                        <a asp-action="Uredi" asp-route-id="@item.Id" class="btn btn-secondary">Uredi</a> |
+                        <a asp-action="Uredi" asp-route-id="@item.Id" class="btn btn-secondary mr-3">Uredi</a>
                         <a asp-action="Brisi" asp-route-id="@item.Id" class="btn btn-danger">Briši</a>
                     </td>
                 </tr>

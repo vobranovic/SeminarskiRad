@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -55,6 +56,24 @@ namespace Cvjećarnica_Zvončica
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            var defaultCulture = "hr-HR";
+            var ci = new CultureInfo(defaultCulture);
+            ci.NumberFormat.NumberDecimalSeparator = ".";
+            ci.NumberFormat.CurrencyDecimalSeparator = ".";
+
+            app.UseRequestLocalization(new RequestLocalizationOptions()
+            {
+                DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(ci),
+                SupportedCultures = new List<CultureInfo>()
+                {
+                    ci
+                },
+                SupportedUICultures = new List<CultureInfo>()
+                {
+                    ci
+                }
+            });
 
             app.UseRouting();
 
