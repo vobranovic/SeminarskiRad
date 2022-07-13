@@ -23,6 +23,7 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
         public IActionResult Index()
         {
             var proizvodi = _dbContext.Proizvod.ToList();
+
             return View(proizvodi);
         }
 

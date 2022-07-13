@@ -26,9 +26,22 @@ namespace Cvjećarnica_Zvončica.Controllers
         {
             var proizvodi = _dbContext.Proizvod.ToList();
 
+            Random random = new Random();
+            List<Proizvod> proizvodiZaPrikaz = new List<Proizvod>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                while (proizvodi.Count > 0)
+                {
+                    var randomBroj = random.Next(proizvodi.Count);
+                    proizvodiZaPrikaz.Add(proizvodi.ElementAt(randomBroj));
+                    proizvodi.RemoveAt(randomBroj);
+                }
+            }
+
             if (kategorijaId != null)
             {
-                proizvodi =
+                proizvodiZaPrikaz =
                     (
                        from p in _dbContext.Proizvod
                        join pk in _dbContext.ProizvodKategorija on p.Id equals pk.ProizvodId
@@ -40,7 +53,6 @@ namespace Cvjećarnica_Zvončica.Controllers
                            Opis = p.Opis,                           
                            Cijena = p.Cijena,
                            Slika = p.Slika
-                           
                        }
                     ).ToList();
             }
@@ -53,7 +65,7 @@ namespace Cvjećarnica_Zvončica.Controllers
                        Text = c.Naziv
                    }
                 );
-            return View(proizvodi);
+            return View(proizvodiZaPrikaz);
         }
 
         [HttpGet]

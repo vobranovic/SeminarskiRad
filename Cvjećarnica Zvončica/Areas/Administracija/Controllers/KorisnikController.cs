@@ -143,8 +143,6 @@ namespace Cvjećarnica_Zvončica.Areas.Administracija.Controllers
                     ModelState.AddModelError("", "Lozinka je obavezna.");
                 }
 
-                
-
                 if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
                 {
                     IdentityResult result = await _userManager.UpdateAsync(korisnik);
