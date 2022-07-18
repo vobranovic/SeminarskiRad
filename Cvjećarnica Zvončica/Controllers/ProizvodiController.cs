@@ -46,5 +46,6 @@ namespace Cvjećarnica_Zvončica.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Greška u dohvatu podataka iz baze podataka.");
             }
         }
+        
     }
 }
