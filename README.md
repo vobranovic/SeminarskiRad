@@ -15,3 +15,9 @@ Aplikacija imitira predlozak za zamisljenu web prodavaonicu cvijeca.
 1) Projekt je potrebno otvoriti u aplikaciji Visual Studio 2022.
 2) Konfigurirati "Connection String" u appsettings.json
 3) Kroz "Package Manager" konzolu potrebno je pokrenuti migracije, kako bi se tablice i baza kreirali na SQL serveru. Komanda je "Update-Database"
+
+
+Admin user kreiran kroz migracije:
+
+u: vedran.obranovic@gmail.com
+p: Q123456a!
