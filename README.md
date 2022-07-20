@@ -19,5 +19,5 @@ Aplikacija imitira predlozak za zamisljenu web prodavaonicu cvijeca.
 
 Admin user kreiran kroz migracije:
 
-u: vedran.obranovic@gmail.com
-p: Q123456a!
+- u: vedran.obranovic@gmail.com
+- p: Q123456a!
